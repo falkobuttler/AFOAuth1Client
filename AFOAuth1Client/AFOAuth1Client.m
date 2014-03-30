@@ -427,8 +427,9 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
                                       path:(NSString *)path
                                 parameters:(NSDictionary *)parameters
 {
+    NSMutableDictionary *mutableParameters = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
+    
     if ( self.embedInGetParams ) {
-        NSMutableDictionary *mutableParameters = parameters ? [parameters mutableCopy] : [NSMutableDictionary dictionary];
         if (self.key && self.secret) {
             [mutableParameters addEntriesFromDictionary:[self OAuthParameters]];
             if (self.accessToken) {
@@ -439,7 +440,6 @@ static NSDictionary * AFKeychainQueryDictionaryWithIdentifier(NSString *identifi
         parameters = mutableParameters;
     }
     else {
-        NSMutableDictionary *mutableParameters = [parameters mutableCopy];
         for (NSString *key in parameters) {
             if ([key hasPrefix:@"oauth_"]) {
                 [mutableParameters removeObjectForKey:key];
