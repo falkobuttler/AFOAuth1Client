@@ -1,24 +1,36 @@
 Pod::Spec.new do |s|
   s.name         = "AFOAuth1Client"
-  s.version      = "0.1.1"
-  s.summary      = "AFNetworking Extension for OAuth 1.0a Authentication"
+  s.version      = "0.3.3"
+  s.summary      = "AFNetworking Extension for OAuth 1.0a Authentication."
   s.homepage     = "https://github.com/AFNetworking/AFOAuth1Client"
+  s.social_media_url = "https://twitter.com/AFNetworking"
   s.license      = 'MIT'
   s.author       = { 'Mattt Thompson' => 'm@mattt.me' }
-  s.source       = { :git => "https://github.com/AFNetworking/AFOAuth1Client.git", :tag => '0.1.1' }
+  s.source       = { :git => "https://github.com/AFNetworking/AFOAuth1Client.git", :tag => '0.3.3' }
   s.source_files = 'AFOAuth1Client'
   s.requires_arc = true
 
   s.ios.deployment_target = '5.0'
-  s.ios.frameworks = 'Security'
+  s.ios.frameworks = 'MobileCoreServices', 'SystemConfiguration', 'Security', 'CoreGraphics'
 
   s.osx.deployment_target = '10.7'
+  s.osx.frameworks = 'CoreServices', 'SystemConfiguration', 'Security'
 
-  s.dependency 'AFNetworking', '>= 0.9'
+  s.dependency 'AFNetworking', '~> 1.3'
 
   s.prefix_header_contents = <<-EOS
-#ifdef __OBJC__
+#import <Availability.h>
+
+#define _AFNETWORKING_PIN_SSL_CERTIFICATES_
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+  #import <SystemConfiguration/SystemConfiguration.h>
+  #import <MobileCoreServices/MobileCoreServices.h>
   #import <Security/Security.h>
-#endif /* __OBJC__*/
+#else
+  #import <SystemConfiguration/SystemConfiguration.h>
+  #import <CoreServices/CoreServices.h>
+  #import <Security/Security.h>
+#endif
 EOS
 end
